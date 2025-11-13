@@ -1,4 +1,4 @@
-MPASM 5.87                      THEREMIN.ASM   11-13-2025  12:50:46         PAGE  1
+MPASM 5.87                      THEREMIN.ASM   11-13-2025  15:19:15         PAGE  1
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
@@ -36,117 +36,164 @@ LOC  OBJECT CODE     LINE SOURCE TEXT
                       00019  ORG 0x05
                       00020 
   00000020            00021 periodo EQU 0x20
-  00000070            00022 STATUS_TEMP EQU 0X70
-  00000071            00023 W_TEMP EQU 0X71
-                      00024 
+  00000021            00022 Tiempo_L EQU 0x21
+  00000022            00023 Tiempo_H EQU 0x22
+  00000070            00024 STATUS_TEMP EQU 0X70
+  00000071            00025 W_TEMP EQU 0X71
+                      00026 
 Warning[207]: Found label after column 1. (TablaDeFrecuencias)
-0005                  00025  TablaDeFrecuencias:
-0005   0782           00026     ADDWF PCL, f
-0006   3411           00027     RETLW .17           ;C4
-0007   342B           00028     RETLW .43           ;D4
-0008   3442           00029     RETLW .66           ;E4
-0009   344D           00030     RETLW .77           ;F4
-000A   3461           00031     RETLW .97           ;G4
-000B   3472           00032     RETLW .114          ;A4
-000C   3481           00033     RETLW .129          ;B4
-000D   3489           00034     RETLW .137          ;C5
-000E   3496           00035     RETLW .150          ;D5
-000F   34A1           00036     RETLW .161          ;E5
-0010   34A7           00037     RETLW .167          ;F5
-0011   34B0           00038     RETLW .176          ;G5
-0012   34B9           00039     RETLW .185          ;A5
-0013   34C1           00040     RETLW .193          ;B5
-0014   34C4           00041     RETLW .196          ;C6
-MPASM 5.87                      THEREMIN.ASM   11-13-2025  12:50:46         PAGE  2
+0005                  00027  TablaDeFrecuencias:
+0005   0782           00028     ADDWF PCL, f
+0006   3411           00029     RETLW .17           ;C4
+0007   342B           00030     RETLW .43           ;D4
+0008   3442           00031     RETLW .66           ;E4
+0009   344D           00032     RETLW .77           ;F4
+000A   3461           00033     RETLW .97           ;G4
+000B   3472           00034     RETLW .114          ;A4
+000C   3481           00035     RETLW .129          ;B4
+000D   3489           00036     RETLW .137          ;C5
+000E   3496           00037     RETLW .150          ;D5
+000F   34A1           00038     RETLW .161          ;E5
+0010   34A7           00039     RETLW .167          ;F5
+0011   34B0           00040     RETLW .176          ;G5
+0012   34B9           00041     RETLW .185          ;A5
+MPASM 5.87                      THEREMIN.ASM   11-13-2025  15:19:15         PAGE  2
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
   VALUE
 
-                      00042  
-0015                  00043 Main
-0015   1683           00044  BSF STATUS, RP0        ;BANCO 1
+0013   34C1           00042     RETLW .193          ;B5
+0014   34C4           00043     RETLW .196          ;C6
+                      00044  
+0015                  00045 Main
+0015   1683           00046  BSF STATUS, RP0        ;BANCO 1
 Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-0016   0186           00045  CLRF TRISB             ;Puerto C como salida
-0017   1703           00046  BSF STATUS, RP1        ;BANCO 3
+0016   0186           00047  CLRF TRISB             ;Puerto C como salida
+0017   1703           00048  BSF STATUS, RP1        ;BANCO 3
 Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-0018   0188           00047  CLRF ANSEL             ;Todo digital
+0018   0188           00049  CLRF ANSEL             ;Todo digital
 Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-0019   0189           00048  CLRF ANSELH
-001A   1303           00049  BCF STATUS, RP1        ;BANCO 1
-001B   3082           00050  MOVLW b'10000010'      
+0019   0189           00050  CLRF ANSELH
+001A   1303           00051  BCF STATUS, RP1        ;BANCO 1
+001B   3082           00052  MOVLW b'10000010'      
 Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-001C   0081           00051  MOVWF OPTION_REG       ;Configuración option_reg
-001D   30A0           00052  MOVLW b'10100000'
-001E   008B           00053  MOVWF INTCON           ;Configuración INTCON
-001F   1283           00054  BCF STATUS, RP0        ;BANCO 0
-0020   0186           00055  CLRF PORTB
-0021   3042           00056  MOVLW .66              
-0022   00A0           00057  MOVWF periodo          ;Seteo de valor PERIODO
-0023   0081           00058  MOVWF TMR0
-                      00059  
+001C   0081           00053  MOVWF OPTION_REG       ;Configuración option_reg
+001D   30A0           00054  MOVLW b'10100000'
+001E   008B           00055  MOVWF INTCON           ;Configuración INTCON
+001F   1283           00056  BCF STATUS, RP0        ;BANCO 0
+0020   0186           00057  CLRF PORTB
+0021   3042           00058  MOVLW .66              
+0022   00A0           00059  MOVWF periodo          ;Seteo de valor PERIODO
+0023   0081           00060  MOVWF TMR0
+                      00061  
 Warning[207]: Found label after column 1. (Loop)
-0024                  00060  Loop
-0024   2???           00061     GOTO Loop
-                      00062  
-                      00063 ; Trigger_and_wait:
-                      00064 ;    BSF PORTB, 0
-                      00065 ;    CALL Delay_10us
-                      00066 ;    BCF PORTB, 0
-                      00067     
-                      00068  
-                      00069 ; Delay_10us:
-                      00070 ;    NOP         ; 1 us
-                      00071 ;    NOP         ; 2 us
-                      00072 ;    NOP         ; 3 us
-                      00073 ;    NOP         ; 4 us
-                      00074 ;    NOP         ; 5 us
-                      00075 ;    NOP         ; 6 us
-                      00076 ;    NOP         ; 7 us
-                      00077 ;    NOP         ; 8 us
-                      00078 ;    NOP         ; 9 us
-                      00079 ;    NOP         ; 10 us
-                      00080 ;    RETURN
-                      00081 
-0025                  00082 ISR:
-Warning[207]: Found label after column 1. (Guardado_contexto)
-0025                  00083     Guardado_contexto:
-0025   00F1           00084         MOVWF W_TEMP
-0026   0E03           00085         SWAPF STATUS, W
-0027   00F0           00086         MOVWF STATUS_TEMP
-                      00087     
-Warning[207]: Found label after column 1. (ChequeoBandera)
-MPASM 5.87                      THEREMIN.ASM   11-13-2025  12:50:46         PAGE  3
+0024                  00062  Loop
+0024   2???           00063     CALL RutinaMedicion
+                      00064     ;CALL CalculoFrecuencia
+0025   2???           00065     GOTO Loop
+                      00066     
+0026                  00067 RutinaMedicion:
+Warning[207]: Found label after column 1. (Trigger_and_wait)
+0026                  00068  Trigger_and_wait:
+0026   1407           00069     BSF PORTC, 0
+0027   2???           00070     CALL Delay_10us
+0028   1007           00071     BCF PORTC, 0
+Warning[207]: Found label after column 1. (EsperaSubida)
+0029                  00072  EsperaSubida:
+0029   1C87           00073     BTFSS PORTC, 1          ; ECHO esta en alto?
+002A   2???           00074     GOTO EsperaSubida
+Warning[207]: Found label after column 1. (InicioTimer)
+002B                  00075  InicioTimer:
+002B   018F           00076     CLRF TMR1H
+002C   018E           00077     CLRF TMR1L
+002D   1410           00078     BSF  T1CON, TMR1ON  ; Arranca el conteo
+                      00079 ; === ESPERA DEL FLANCO DE BAJADA DEL ECHO ===
+                      00080     ; El TimerH se paso de 98?
+Warning[207]: Found label after column 1. (VerificarTimeout)
+002E                  00081  VerificarTimeout:
+002E   080F           00082     MOVF TMR1H, 0
+002F   3C62           00083     SUBLW .98
+0030   1C03           00084     BTFSS STATUS, C     ;C=1 si TMR1H<=98
+0031   2???           00085     GOTO Timeout        ;C=0 si TMR1H>98
+MPASM 5.87                      THEREMIN.ASM   11-13-2025  15:19:15         PAGE  3
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
   VALUE
 
-0028                  00088     ChequeoBandera:
-0028   190B           00089         BTFSC INTCON, T0IF
-0029   2???           00090         GOTO ONDA_CUADRADA
-002A   2???           00091         GOTO SalidaISR
-                      00092     
+Warning[207]: Found label after column 1. (EsperaBajada)
+0032                  00086  EsperaBajada:
+0032   1887           00087     BTFSC PORTC, 1  ; Espera mientras siga en alto
+0033   2???           00088     GOTO VerificarTimeout
+0034   1010           00089     BCF  T1CON, TMR1ON
+0035   2???           00090     GOTO CapturaValores
+Warning[207]: Found label after column 1. (Timeout)
+0036                  00091  Timeout:
+0036   1010           00092     BCF  T1CON, TMR1ON
+0037   018E           00093     CLRF TMR1L
+0038   018F           00094     CLRF TMR1H
+Warning[207]: Found label after column 1. (CapturaValores)
+0039                  00095  CapturaValores:
+0039   080E           00096     MOVF TMR1L, W
+003A   00A1           00097     MOVWF Tiempo_L
+003B   080F           00098     MOVF TMR1H, W
+003C   00A2           00099     MOVWF Tiempo_H
+003D   0008           00100     RETURN
+                      00101     
+Warning[207]: Found label after column 1. (Delay_10us)
+003E                  00102  Delay_10us:
+003E   0000           00103     NOP         ; 1 us
+003F   0000           00104     NOP         ; 2 us
+0040   0000           00105     NOP         ; 3 us
+0041   0000           00106     NOP         ; 4 us
+0042   0000           00107     NOP         ; 5 us
+0043   0000           00108     NOP         ; 6 us
+0044   0000           00109     NOP         ; 7 us
+0045   0000           00110     NOP         ; 8 us
+0046   0000           00111     NOP         ; 9 us
+0047   0000           00112     NOP         ; 10 us
+0048   0008           00113     RETURN
+                      00114 
+0049                  00115 ISR:
+Warning[207]: Found label after column 1. (Guardado_contexto)
+0049                  00116     Guardado_contexto:
+0049   00F1           00117         MOVWF W_TEMP
+004A   0E03           00118         SWAPF STATUS, W
+004B   00F0           00119         MOVWF STATUS_TEMP
+                      00120     
+Warning[207]: Found label after column 1. (ChequeoBandera)
+004C                  00121     ChequeoBandera:
+004C   190B           00122         BTFSC INTCON, T0IF
+004D   2???           00123         GOTO ONDA_CUADRADA
+004E   2???           00124         GOTO SalidaISR
+                      00125     
 Warning[207]: Found label after column 1. (ONDA_CUADRADA)
-002B                  00093     ONDA_CUADRADA:
-002B   110B           00094         BCF INTCON, T0IF
-002C   0820           00095         MOVF periodo, W
-002D   0081           00096         MOVWF TMR0
-002E   3001           00097         MOVLW .1
-002F   0686           00098         XORWF PORTB, F
-0030   2???           00099         GOTO SalidaISR
-                      00100     
+004F                  00126     ONDA_CUADRADA:
+004F   110B           00127         BCF INTCON, T0IF
+0050   0820           00128         MOVF periodo, W
+0051   0081           00129         MOVWF TMR0
+0052   3001           00130         MOVLW .1
+0053   0686           00131         XORWF PORTB, F
+MPASM 5.87                      THEREMIN.ASM   11-13-2025  15:19:15         PAGE  4
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+0054   2???           00132         GOTO SalidaISR
+                      00133     
 Warning[207]: Found label after column 1. (SalidaISR)
-0031                  00101     SalidaISR:
-0031   0E70           00102         SWAPF STATUS_TEMP, W
-0032   0083           00103         MOVWF STATUS
-0033   0EF1           00104         SWAPF W_TEMP, F
-0034   0E71           00105         SWAPF W_TEMP, W
-0035   0009           00106         RETFIE
-                      00107  
+0055                  00134     SalidaISR:
+0055   0E70           00135         SWAPF STATUS_TEMP, W
+0056   0083           00136         MOVWF STATUS
+0057   0EF1           00137         SWAPF W_TEMP, F
+0058   0E71           00138         SWAPF W_TEMP, W
+0059   0009           00139         RETFIE
+                      00140  
 Warning[205]: Found directive in column 1. (END)
-23E1 3FFF             00108 END
-MPASM 5.87                      THEREMIN.ASM   11-13-2025  12:50:46         PAGE  4
+23E1 3FFF             00141 END
+MPASM 5.87                      THEREMIN.ASM   11-13-2025  15:19:15         PAGE  5
 
 
 SYMBOL TABLE
@@ -205,7 +252,7 @@ BRG6                              00000006
 BRG7                              00000007
 BRG8                              00000000
 BRG9                              00000001
-MPASM 5.87                      THEREMIN.ASM   11-13-2025  12:50:46         PAGE  5
+MPASM 5.87                      THEREMIN.ASM   11-13-2025  15:19:15         PAGE  6
 
 
 SYMBOL TABLE
@@ -264,7 +311,7 @@ CHS0                              00000002
 CHS1                              00000003
 CHS2                              00000004
 CHS3                              00000005
-MPASM 5.87                      THEREMIN.ASM   11-13-2025  12:50:46         PAGE  6
+MPASM 5.87                      THEREMIN.ASM   11-13-2025  15:19:15         PAGE  7
 
 
 SYMBOL TABLE
@@ -277,7 +324,8 @@ CM2CON0                           00000108
 CM2CON1                           00000109
 CREN                              00000004
 CSRC                              00000007
-ChequeoBandera                    00000028
+CapturaValores                    00000039
+ChequeoBandera                    0000004C
 D                                 00000005
 DATA_ADDRESS                      00000005
 DC                                00000001
@@ -287,6 +335,7 @@ DC2B0                             00000004
 DC2B1                             00000005
 D_A                               00000005
 D_NOT_A                           00000005
+Delay_10us                        0000003E
 ECCPAS                            0000009C
 ECCPAS0                           00000004
 ECCPAS1                           00000005
@@ -302,6 +351,8 @@ EEDATH                            0000010E
 EEIE                              00000004
 EEIF                              00000004
 EEPGD                             00000007
+EsperaBajada                      00000032
+EsperaSubida                      00000029
 F                                 00000001
 FERR                              00000002
 FSR                               00000004
@@ -311,7 +362,7 @@ GIE                               00000007
 GO                                00000001
 GO_DONE                           00000001
 GO_NOT_DONE                       00000001
-Guardado_contexto                 00000025
+Guardado_contexto                 00000049
 HTS                               00000002
 I2C_DATA                          00000005
 I2C_READ                          00000002
@@ -319,16 +370,16 @@ I2C_START                         00000003
 I2C_STOP                          00000004
 INDF                              00000000
 INTCON                            0000000B
-INTE                              00000004
-INTEDG                            00000006
-INTF                              00000001
-IOCB                              00000096
-MPASM 5.87                      THEREMIN.ASM   11-13-2025  12:50:46         PAGE  7
+MPASM 5.87                      THEREMIN.ASM   11-13-2025  15:19:15         PAGE  8
 
 
 SYMBOL TABLE
   LABEL                             VALUE 
 
+INTE                              00000004
+INTEDG                            00000006
+INTF                              00000001
+IOCB                              00000096
 IOCB0                             00000000
 IOCB1                             00000001
 IOCB2                             00000002
@@ -341,7 +392,8 @@ IRCF0                             00000004
 IRCF1                             00000005
 IRCF2                             00000006
 IRP                               00000007
-ISR                               00000025
+ISR                               00000049
+InicioTimer                       0000002B
 LTS                               00000001
 Loop                              00000024
 MC1OUT                            00000007
@@ -371,23 +423,23 @@ NOT_TX8                           00000006
 NOT_W                             00000002
 NOT_WRITE                         00000002
 OERR                              00000001
-ONDA_CUADRADA                     0000002B
+ONDA_CUADRADA                     0000004F
 OPTION_REG                        00000081
 OSCCON                            0000008F
 OSCTUNE                           00000090
 OSFIE                             00000007
 OSFIF                             00000007
-OSTS                              00000003
-P                                 00000004
-P1M0                              00000006
-P1M1                              00000007
-PCL                               00000002
-MPASM 5.87                      THEREMIN.ASM   11-13-2025  12:50:46         PAGE  8
+MPASM 5.87                      THEREMIN.ASM   11-13-2025  15:19:15         PAGE  9
 
 
 SYMBOL TABLE
   LABEL                             VALUE 
 
+OSTS                              00000003
+P                                 00000004
+P1M0                              00000006
+P1M1                              00000007
+PCL                               00000002
 PCLATH                            0000000A
 PCON                              0000008E
 PDC0                              00000000
@@ -436,17 +488,17 @@ RB1                               00000001
 RB2                               00000002
 RB3                               00000003
 RB4                               00000004
-RB5                               00000005
-RB6                               00000006
-RB7                               00000007
-RBIE                              00000003
-RBIF                              00000000
-MPASM 5.87                      THEREMIN.ASM   11-13-2025  12:50:46         PAGE  9
+MPASM 5.87                      THEREMIN.ASM   11-13-2025  15:19:15         PAGE 10
 
 
 SYMBOL TABLE
   LABEL                             VALUE 
 
+RB5                               00000005
+RB6                               00000006
+RB7                               00000007
+RBIE                              00000003
+RBIF                              00000000
 RC0                               00000000
 RC1                               00000001
 RC2                               00000002
@@ -485,6 +537,7 @@ RX9                               00000006
 RX9D                              00000000
 R_NOT_W                           00000002
 R_W                               00000002
+RutinaMedicion                    00000026
 S                                 00000003
 SBOREN                            00000004
 SCKP                              00000004
@@ -494,18 +547,18 @@ SENDB                             00000003
 SMP                               00000007
 SPBRG                             00000099
 SPBRGH                            0000009A
+MPASM 5.87                      THEREMIN.ASM   11-13-2025  15:19:15         PAGE 11
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
 SPEN                              00000007
 SR0                               00000006
 SR1                               00000007
 SRCON                             00000185
 SREN                              00000005
 SSPADD                            00000093
-MPASM 5.87                      THEREMIN.ASM   11-13-2025  12:50:46         PAGE 10
-
-
-SYMBOL TABLE
-  LABEL                             VALUE 
-
 SSPBUF                            00000013
 SSPCON                            00000014
 SSPCON2                           00000091
@@ -528,7 +581,7 @@ STRD                              00000003
 STRSYNC                           00000004
 SWDTEN                            00000000
 SYNC                              00000004
-SalidaISR                         00000031
+SalidaISR                         00000055
 T0CS                              00000005
 T0IE                              00000005
 T0IF                              00000002
@@ -553,18 +606,18 @@ TMR1CS                            00000001
 TMR1GE                            00000006
 TMR1H                             0000000F
 TMR1IE                            00000000
+MPASM 5.87                      THEREMIN.ASM   11-13-2025  15:19:15         PAGE 12
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
 TMR1IF                            00000000
 TMR1L                             0000000E
 TMR1ON                            00000000
 TMR2                              00000011
 TMR2IE                            00000001
 TMR2IF                            00000001
-MPASM 5.87                      THEREMIN.ASM   11-13-2025  12:50:46         PAGE 11
-
-
-SYMBOL TABLE
-  LABEL                             VALUE 
-
 TMR2ON                            00000002
 TOUTPS0                           00000003
 TOUTPS1                           00000004
@@ -612,18 +665,18 @@ TRISE1                            00000001
 TRISE2                            00000002
 TRISE3                            00000003
 TRMT                              00000001
+MPASM 5.87                      THEREMIN.ASM   11-13-2025  15:19:15         PAGE 13
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
 TUN0                              00000000
 TUN1                              00000001
 TUN2                              00000002
 TUN3                              00000003
 TUN4                              00000004
 TX8_9                             00000006
-MPASM 5.87                      THEREMIN.ASM   11-13-2025  12:50:46         PAGE 12
-
-
-SYMBOL TABLE
-  LABEL                             VALUE 
-
 TX9                               00000006
 TX9D                              00000000
 TXD8                              00000000
@@ -633,6 +686,10 @@ TXIF                              00000004
 TXREG                             00000019
 TXSTA                             00000098
 TablaDeFrecuencias                00000005
+Tiempo_H                          00000022
+Tiempo_L                          00000021
+Timeout                           00000036
+Trigger_and_wait                  00000026
 UA                                00000001
 ULPWUE                            00000005
 ULPWUIE                           00000002
@@ -648,6 +705,7 @@ VREN                              00000007
 VROE                              00000006
 VRR                               00000005
 VRSS                              00000004
+VerificarTimeout                  0000002E
 W                                 00000000
 WCOL                              00000007
 WDTCON                            00000105
@@ -666,6 +724,12 @@ WPUB6                             00000006
 WPUB7                             00000007
 WR                                00000001
 WREN                              00000002
+MPASM 5.87                      THEREMIN.ASM   11-13-2025  15:19:15         PAGE 14
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
 WRERR                             00000003
 WUE                               00000001
 W_TEMP                            00000071
@@ -677,12 +741,6 @@ _BOR4V_BOR40V                     00003FFF
 _BOREN_NSLEEP                     00003EFF
 _BOREN_OFF                        00003CFF
 _BOREN_ON                         00003FFF
-MPASM 5.87                      THEREMIN.ASM   11-13-2025  12:50:46         PAGE 13
-
-
-SYMBOL TABLE
-  LABEL                             VALUE 
-
 _BOREN_SBODEN                     00003DFF
 _BOR_NSLEEP                       00003EFF
 _BOR_OFF                          00003CFF
@@ -725,6 +783,12 @@ _INTRC_OSC_CLKOUT                 00003FFD
 _INTRC_OSC_NOCLKOUT               00003FFC
 _LP_OSC                           00003FF8
 _LVP_OFF                          00002FFF
+MPASM 5.87                      THEREMIN.ASM   11-13-2025  15:19:15         PAGE 15
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
 _LVP_ON                           00003FFF
 _MCLRE_OFF                        00003FDF
 _MCLRE_ON                         00003FFF
@@ -736,12 +800,6 @@ _WDT_OFF                          00003FF7
 _WDT_ON                           00003FFF
 _WRT_1FOURTH                      00003BFF
 _WRT_256                          00003DFF
-MPASM 5.87                      THEREMIN.ASM   11-13-2025  12:50:46         PAGE 14
-
-
-SYMBOL TABLE
-  LABEL                             VALUE 
-
 _WRT_HALF                         000039FF
 _WRT_OFF                          00003FFF
 _XT_OSC                           00003FF9
@@ -749,7 +807,7 @@ __16F887                          00000001
 periodo                           00000020
 
 Errors   :     0
-Warnings :     7 reported,     0 suppressed
+Warnings :    15 reported,     0 suppressed
 Messages :     4 reported,     0 suppressed
 
 

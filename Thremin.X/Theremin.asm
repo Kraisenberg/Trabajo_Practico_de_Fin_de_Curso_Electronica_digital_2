@@ -19,6 +19,8 @@
  ORG 0x05
 
 periodo EQU 0x20
+Tiempo_L EQU 0x21
+Tiempo_H EQU 0x22
 STATUS_TEMP EQU 0X70
 W_TEMP EQU 0X71
 
@@ -58,26 +60,57 @@ Main
  MOVWF TMR0
  
  Loop
+    CALL RutinaMedicion
+    ;CALL CalculoFrecuencia
     GOTO Loop
- 
-; Trigger_and_wait:
-;    BSF PORTB, 0
-;    CALL Delay_10us
-;    BCF PORTB, 0
     
- 
-; Delay_10us:
-;    NOP         ; 1 us
-;    NOP         ; 2 us
-;    NOP         ; 3 us
-;    NOP         ; 4 us
-;    NOP         ; 5 us
-;    NOP         ; 6 us
-;    NOP         ; 7 us
-;    NOP         ; 8 us
-;    NOP         ; 9 us
-;    NOP         ; 10 us
-;    RETURN
+RutinaMedicion:
+ Trigger_and_wait:
+    BSF PORTC, 0
+    CALL Delay_10us
+    BCF PORTC, 0
+ EsperaSubida:
+    BTFSS PORTC, 1	    ; ECHO esta en alto?
+    GOTO EsperaSubida
+ InicioTimer:
+    CLRF TMR1H
+    CLRF TMR1L
+    BSF  T1CON, TMR1ON  ; Arranca el conteo
+; === ESPERA DEL FLANCO DE BAJADA DEL ECHO ===
+    ; El TimerH se paso de 98?
+ VerificarTimeout:
+    MOVF TMR1H, 0
+    SUBLW .98
+    BTFSS STATUS, C	;C=1 si TMR1H<=98
+    GOTO Timeout	;C=0 si TMR1H>98
+ EsperaBajada:
+    BTFSC PORTC, 1  ; Espera mientras siga en alto
+    GOTO VerificarTimeout
+    BCF  T1CON, TMR1ON
+    GOTO CapturaValores
+ Timeout:
+    BCF  T1CON, TMR1ON
+    CLRF TMR1L
+    CLRF TMR1H
+ CapturaValores:
+    MOVF TMR1L, W
+    MOVWF Tiempo_L
+    MOVF TMR1H, W
+    MOVWF Tiempo_H
+    RETURN
+    
+ Delay_10us:
+    NOP         ; 1 us
+    NOP         ; 2 us
+    NOP         ; 3 us
+    NOP         ; 4 us
+    NOP         ; 5 us
+    NOP         ; 6 us
+    NOP         ; 7 us
+    NOP         ; 8 us
+    NOP         ; 9 us
+    NOP         ; 10 us
+    RETURN
 
 ISR:
     Guardado_contexto:
