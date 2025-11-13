@@ -1,5 +1,5 @@
 MPLINK 5.09, LINKER
-Linker Map File - Created Thu Nov 13 15:19:16 2025
+Linker Map File - Created Thu Nov 13 18:44:27 2025
 
                                  Section Info
                   Section       Type    Address   Location Size(Bytes)
@@ -7,7 +7,7 @@ Linker Map File - Created Thu Nov 13 15:19:16 2025
                    .org_0       code   0x000000    program   0x000002
                    .cinit    romdata   0x000001    program   0x000004
                    .org_1       code   0x000004    program   0x000002
-                   .org_2       code   0x000005    program   0x0000aa
+                   .org_2       code   0x000005    program   0x0001b6
 .config_2007_BUILD/DEFAULT/PRODUCTION/THEREMI       code   0x002007    program   0x000002
 .config_2008_BUILD/DEFAULT/PRODUCTION/THEREMI       code   0x002008    program   0x000002
 
@@ -17,54 +17,96 @@ Linker Map File - Created Thu Nov 13 15:19:16 2025
                                Start         End      
                            ---------   ---------      
                             0x000000    0x000002      
-                            0x000004    0x000059      
+                            0x000004    0x0000df      
                             0x002007    0x002008      
-            91 out of 8455 program addresses used, program memory utilization is 1%
+            225 out of 8455 program addresses used, program memory utilization is 2%
 
 
 
                               Symbols - Sorted by Name
                      Name    Address   Location    Storage File                     
                 ---------  ---------  ---------  --------- ---------                
-           CapturaValores   0x000039    program     static C:\Users\valen\Desktop\INGENIERIA\DIGITAL 2\GIT\TP_FINAL\Trabajo_Practico_de_Fin_de_Curso_Electronica_digital_2\Thremin.X\Theremin.asm
-           ChequeoBandera   0x00004c    program     static C:\Users\valen\Desktop\INGENIERIA\DIGITAL 2\GIT\TP_FINAL\Trabajo_Practico_de_Fin_de_Curso_Electronica_digital_2\Thremin.X\Theremin.asm
-               Delay_10us   0x00003e    program     static C:\Users\valen\Desktop\INGENIERIA\DIGITAL 2\GIT\TP_FINAL\Trabajo_Practico_de_Fin_de_Curso_Electronica_digital_2\Thremin.X\Theremin.asm
-             EsperaBajada   0x000032    program     static C:\Users\valen\Desktop\INGENIERIA\DIGITAL 2\GIT\TP_FINAL\Trabajo_Practico_de_Fin_de_Curso_Electronica_digital_2\Thremin.X\Theremin.asm
-             EsperaSubida   0x000029    program     static C:\Users\valen\Desktop\INGENIERIA\DIGITAL 2\GIT\TP_FINAL\Trabajo_Practico_de_Fin_de_Curso_Electronica_digital_2\Thremin.X\Theremin.asm
-        Guardado_contexto   0x000049    program     static C:\Users\valen\Desktop\INGENIERIA\DIGITAL 2\GIT\TP_FINAL\Trabajo_Practico_de_Fin_de_Curso_Electronica_digital_2\Thremin.X\Theremin.asm
-                      ISR   0x000049    program     static C:\Users\valen\Desktop\INGENIERIA\DIGITAL 2\GIT\TP_FINAL\Trabajo_Practico_de_Fin_de_Curso_Electronica_digital_2\Thremin.X\Theremin.asm
-              InicioTimer   0x00002b    program     static C:\Users\valen\Desktop\INGENIERIA\DIGITAL 2\GIT\TP_FINAL\Trabajo_Practico_de_Fin_de_Curso_Electronica_digital_2\Thremin.X\Theremin.asm
-                     Loop   0x000024    program     static C:\Users\valen\Desktop\INGENIERIA\DIGITAL 2\GIT\TP_FINAL\Trabajo_Practico_de_Fin_de_Curso_Electronica_digital_2\Thremin.X\Theremin.asm
-                     Main   0x000015    program     static C:\Users\valen\Desktop\INGENIERIA\DIGITAL 2\GIT\TP_FINAL\Trabajo_Practico_de_Fin_de_Curso_Electronica_digital_2\Thremin.X\Theremin.asm
-            ONDA_CUADRADA   0x00004f    program     static C:\Users\valen\Desktop\INGENIERIA\DIGITAL 2\GIT\TP_FINAL\Trabajo_Practico_de_Fin_de_Curso_Electronica_digital_2\Thremin.X\Theremin.asm
-           RutinaMedicion   0x000026    program     static C:\Users\valen\Desktop\INGENIERIA\DIGITAL 2\GIT\TP_FINAL\Trabajo_Practico_de_Fin_de_Curso_Electronica_digital_2\Thremin.X\Theremin.asm
-                SalidaISR   0x000055    program     static C:\Users\valen\Desktop\INGENIERIA\DIGITAL 2\GIT\TP_FINAL\Trabajo_Practico_de_Fin_de_Curso_Electronica_digital_2\Thremin.X\Theremin.asm
-       TablaDeFrecuencias   0x000005    program     static C:\Users\valen\Desktop\INGENIERIA\DIGITAL 2\GIT\TP_FINAL\Trabajo_Practico_de_Fin_de_Curso_Electronica_digital_2\Thremin.X\Theremin.asm
-                  Timeout   0x000036    program     static C:\Users\valen\Desktop\INGENIERIA\DIGITAL 2\GIT\TP_FINAL\Trabajo_Practico_de_Fin_de_Curso_Electronica_digital_2\Thremin.X\Theremin.asm
-         Trigger_and_wait   0x000026    program     static C:\Users\valen\Desktop\INGENIERIA\DIGITAL 2\GIT\TP_FINAL\Trabajo_Practico_de_Fin_de_Curso_Electronica_digital_2\Thremin.X\Theremin.asm
-         VerificarTimeout   0x00002e    program     static C:\Users\valen\Desktop\INGENIERIA\DIGITAL 2\GIT\TP_FINAL\Trabajo_Practico_de_Fin_de_Curso_Electronica_digital_2\Thremin.X\Theremin.asm
+         CalculoDistancia   0x000089    program     static C:\Users\valen\Desktop\INGENIERIA\DIGITAL 2\GIT\TP_FINAL\Trabajo_Practico_de_Fin_de_Curso_Electronica_digital_2\Thremin.X\Theremin.asm
+        CalculoFrecuencia   0x00001e    program     static C:\Users\valen\Desktop\INGENIERIA\DIGITAL 2\GIT\TP_FINAL\Trabajo_Practico_de_Fin_de_Curso_Electronica_digital_2\Thremin.X\Theremin.asm
+           CapturaValores   0x0000bc    program     static C:\Users\valen\Desktop\INGENIERIA\DIGITAL 2\GIT\TP_FINAL\Trabajo_Practico_de_Fin_de_Curso_Electronica_digital_2\Thremin.X\Theremin.asm
+           ChequeoBandera   0x0000cf    program     static C:\Users\valen\Desktop\INGENIERIA\DIGITAL 2\GIT\TP_FINAL\Trabajo_Practico_de_Fin_de_Curso_Electronica_digital_2\Thremin.X\Theremin.asm
+               Delay_10us   0x0000c1    program     static C:\Users\valen\Desktop\INGENIERIA\DIGITAL 2\GIT\TP_FINAL\Trabajo_Practico_de_Fin_de_Curso_Electronica_digital_2\Thremin.X\Theremin.asm
+              DivisionEnd   0x0000a4    program     static C:\Users\valen\Desktop\INGENIERIA\DIGITAL 2\GIT\TP_FINAL\Trabajo_Practico_de_Fin_de_Curso_Electronica_digital_2\Thremin.X\Theremin.asm
+             DivisionLoop   0x000096    program     static C:\Users\valen\Desktop\INGENIERIA\DIGITAL 2\GIT\TP_FINAL\Trabajo_Practico_de_Fin_de_Curso_Electronica_digital_2\Thremin.X\Theremin.asm
+             EsperaBajada   0x0000b5    program     static C:\Users\valen\Desktop\INGENIERIA\DIGITAL 2\GIT\TP_FINAL\Trabajo_Practico_de_Fin_de_Curso_Electronica_digital_2\Thremin.X\Theremin.asm
+             EsperaSubida   0x0000ac    program     static C:\Users\valen\Desktop\INGENIERIA\DIGITAL 2\GIT\TP_FINAL\Trabajo_Practico_de_Fin_de_Curso_Electronica_digital_2\Thremin.X\Theremin.asm
+            FinFrecuencia   0x000088    program     static C:\Users\valen\Desktop\INGENIERIA\DIGITAL 2\GIT\TP_FINAL\Trabajo_Practico_de_Fin_de_Curso_Electronica_digital_2\Thremin.X\Theremin.asm
+        Guardado_contexto   0x0000cc    program     static C:\Users\valen\Desktop\INGENIERIA\DIGITAL 2\GIT\TP_FINAL\Trabajo_Practico_de_Fin_de_Curso_Electronica_digital_2\Thremin.X\Theremin.asm
+                      ISR   0x0000cc    program     static C:\Users\valen\Desktop\INGENIERIA\DIGITAL 2\GIT\TP_FINAL\Trabajo_Practico_de_Fin_de_Curso_Electronica_digital_2\Thremin.X\Theremin.asm
+              InicioTimer   0x0000ae    program     static C:\Users\valen\Desktop\INGENIERIA\DIGITAL 2\GIT\TP_FINAL\Trabajo_Practico_de_Fin_de_Curso_Electronica_digital_2\Thremin.X\Theremin.asm
+                     Loop   0x00001a    program     static C:\Users\valen\Desktop\INGENIERIA\DIGITAL 2\GIT\TP_FINAL\Trabajo_Practico_de_Fin_de_Curso_Electronica_digital_2\Thremin.X\Theremin.asm
+                     Main   0x000005    program     static C:\Users\valen\Desktop\INGENIERIA\DIGITAL 2\GIT\TP_FINAL\Trabajo_Practico_de_Fin_de_Curso_Electronica_digital_2\Thremin.X\Theremin.asm
+                  NOTA_A4   0x000069    program     static C:\Users\valen\Desktop\INGENIERIA\DIGITAL 2\GIT\TP_FINAL\Trabajo_Practico_de_Fin_de_Curso_Electronica_digital_2\Thremin.X\Theremin.asm
+                  NOTA_A5   0x00007e    program     static C:\Users\valen\Desktop\INGENIERIA\DIGITAL 2\GIT\TP_FINAL\Trabajo_Practico_de_Fin_de_Curso_Electronica_digital_2\Thremin.X\Theremin.asm
+                  NOTA_B4   0x00006c    program     static C:\Users\valen\Desktop\INGENIERIA\DIGITAL 2\GIT\TP_FINAL\Trabajo_Practico_de_Fin_de_Curso_Electronica_digital_2\Thremin.X\Theremin.asm
+                  NOTA_B5   0x000081    program     static C:\Users\valen\Desktop\INGENIERIA\DIGITAL 2\GIT\TP_FINAL\Trabajo_Practico_de_Fin_de_Curso_Electronica_digital_2\Thremin.X\Theremin.asm
+                  NOTA_C4   0x00005a    program     static C:\Users\valen\Desktop\INGENIERIA\DIGITAL 2\GIT\TP_FINAL\Trabajo_Practico_de_Fin_de_Curso_Electronica_digital_2\Thremin.X\Theremin.asm
+                  NOTA_C5   0x00006f    program     static C:\Users\valen\Desktop\INGENIERIA\DIGITAL 2\GIT\TP_FINAL\Trabajo_Practico_de_Fin_de_Curso_Electronica_digital_2\Thremin.X\Theremin.asm
+                  NOTA_C6   0x000084    program     static C:\Users\valen\Desktop\INGENIERIA\DIGITAL 2\GIT\TP_FINAL\Trabajo_Practico_de_Fin_de_Curso_Electronica_digital_2\Thremin.X\Theremin.asm
+                  NOTA_D4   0x00005d    program     static C:\Users\valen\Desktop\INGENIERIA\DIGITAL 2\GIT\TP_FINAL\Trabajo_Practico_de_Fin_de_Curso_Electronica_digital_2\Thremin.X\Theremin.asm
+                  NOTA_D5   0x000072    program     static C:\Users\valen\Desktop\INGENIERIA\DIGITAL 2\GIT\TP_FINAL\Trabajo_Practico_de_Fin_de_Curso_Electronica_digital_2\Thremin.X\Theremin.asm
+                  NOTA_E4   0x000060    program     static C:\Users\valen\Desktop\INGENIERIA\DIGITAL 2\GIT\TP_FINAL\Trabajo_Practico_de_Fin_de_Curso_Electronica_digital_2\Thremin.X\Theremin.asm
+                  NOTA_E5   0x000075    program     static C:\Users\valen\Desktop\INGENIERIA\DIGITAL 2\GIT\TP_FINAL\Trabajo_Practico_de_Fin_de_Curso_Electronica_digital_2\Thremin.X\Theremin.asm
+                  NOTA_F4   0x000063    program     static C:\Users\valen\Desktop\INGENIERIA\DIGITAL 2\GIT\TP_FINAL\Trabajo_Practico_de_Fin_de_Curso_Electronica_digital_2\Thremin.X\Theremin.asm
+                  NOTA_F5   0x000078    program     static C:\Users\valen\Desktop\INGENIERIA\DIGITAL 2\GIT\TP_FINAL\Trabajo_Practico_de_Fin_de_Curso_Electronica_digital_2\Thremin.X\Theremin.asm
+                  NOTA_G4   0x000066    program     static C:\Users\valen\Desktop\INGENIERIA\DIGITAL 2\GIT\TP_FINAL\Trabajo_Practico_de_Fin_de_Curso_Electronica_digital_2\Thremin.X\Theremin.asm
+                  NOTA_G5   0x00007b    program     static C:\Users\valen\Desktop\INGENIERIA\DIGITAL 2\GIT\TP_FINAL\Trabajo_Practico_de_Fin_de_Curso_Electronica_digital_2\Thremin.X\Theremin.asm
+           NoEcho_NoRango   0x0000a7    program     static C:\Users\valen\Desktop\INGENIERIA\DIGITAL 2\GIT\TP_FINAL\Trabajo_Practico_de_Fin_de_Curso_Electronica_digital_2\Thremin.X\Theremin.asm
+            ONDA_CUADRADA   0x0000d2    program     static C:\Users\valen\Desktop\INGENIERIA\DIGITAL 2\GIT\TP_FINAL\Trabajo_Practico_de_Fin_de_Curso_Electronica_digital_2\Thremin.X\Theremin.asm
+           RutinaMedicion   0x0000a9    program     static C:\Users\valen\Desktop\INGENIERIA\DIGITAL 2\GIT\TP_FINAL\Trabajo_Practico_de_Fin_de_Curso_Electronica_digital_2\Thremin.X\Theremin.asm
+                SalidaISR   0x0000db    program     static C:\Users\valen\Desktop\INGENIERIA\DIGITAL 2\GIT\TP_FINAL\Trabajo_Practico_de_Fin_de_Curso_Electronica_digital_2\Thremin.X\Theremin.asm
+                  SinEcho   0x000087    program     static C:\Users\valen\Desktop\INGENIERIA\DIGITAL 2\GIT\TP_FINAL\Trabajo_Practico_de_Fin_de_Curso_Electronica_digital_2\Thremin.X\Theremin.asm
+                  Timeout   0x0000b9    program     static C:\Users\valen\Desktop\INGENIERIA\DIGITAL 2\GIT\TP_FINAL\Trabajo_Practico_de_Fin_de_Curso_Electronica_digital_2\Thremin.X\Theremin.asm
+         Trigger_and_wait   0x0000a9    program     static C:\Users\valen\Desktop\INGENIERIA\DIGITAL 2\GIT\TP_FINAL\Trabajo_Practico_de_Fin_de_Curso_Electronica_digital_2\Thremin.X\Theremin.asm
+         VerificarTimeout   0x0000b1    program     static C:\Users\valen\Desktop\INGENIERIA\DIGITAL 2\GIT\TP_FINAL\Trabajo_Practico_de_Fin_de_Curso_Electronica_digital_2\Thremin.X\Theremin.asm
 
 
 
                               Symbols - Sorted by Address
                      Name    Address   Location    Storage File                     
                 ---------  ---------  ---------  --------- ---------                
-       TablaDeFrecuencias   0x000005    program     static C:\Users\valen\Desktop\INGENIERIA\DIGITAL 2\GIT\TP_FINAL\Trabajo_Practico_de_Fin_de_Curso_Electronica_digital_2\Thremin.X\Theremin.asm
-                     Main   0x000015    program     static C:\Users\valen\Desktop\INGENIERIA\DIGITAL 2\GIT\TP_FINAL\Trabajo_Practico_de_Fin_de_Curso_Electronica_digital_2\Thremin.X\Theremin.asm
-                     Loop   0x000024    program     static C:\Users\valen\Desktop\INGENIERIA\DIGITAL 2\GIT\TP_FINAL\Trabajo_Practico_de_Fin_de_Curso_Electronica_digital_2\Thremin.X\Theremin.asm
-         Trigger_and_wait   0x000026    program     static C:\Users\valen\Desktop\INGENIERIA\DIGITAL 2\GIT\TP_FINAL\Trabajo_Practico_de_Fin_de_Curso_Electronica_digital_2\Thremin.X\Theremin.asm
-           RutinaMedicion   0x000026    program     static C:\Users\valen\Desktop\INGENIERIA\DIGITAL 2\GIT\TP_FINAL\Trabajo_Practico_de_Fin_de_Curso_Electronica_digital_2\Thremin.X\Theremin.asm
-             EsperaSubida   0x000029    program     static C:\Users\valen\Desktop\INGENIERIA\DIGITAL 2\GIT\TP_FINAL\Trabajo_Practico_de_Fin_de_Curso_Electronica_digital_2\Thremin.X\Theremin.asm
-              InicioTimer   0x00002b    program     static C:\Users\valen\Desktop\INGENIERIA\DIGITAL 2\GIT\TP_FINAL\Trabajo_Practico_de_Fin_de_Curso_Electronica_digital_2\Thremin.X\Theremin.asm
-         VerificarTimeout   0x00002e    program     static C:\Users\valen\Desktop\INGENIERIA\DIGITAL 2\GIT\TP_FINAL\Trabajo_Practico_de_Fin_de_Curso_Electronica_digital_2\Thremin.X\Theremin.asm
-             EsperaBajada   0x000032    program     static C:\Users\valen\Desktop\INGENIERIA\DIGITAL 2\GIT\TP_FINAL\Trabajo_Practico_de_Fin_de_Curso_Electronica_digital_2\Thremin.X\Theremin.asm
-                  Timeout   0x000036    program     static C:\Users\valen\Desktop\INGENIERIA\DIGITAL 2\GIT\TP_FINAL\Trabajo_Practico_de_Fin_de_Curso_Electronica_digital_2\Thremin.X\Theremin.asm
-           CapturaValores   0x000039    program     static C:\Users\valen\Desktop\INGENIERIA\DIGITAL 2\GIT\TP_FINAL\Trabajo_Practico_de_Fin_de_Curso_Electronica_digital_2\Thremin.X\Theremin.asm
-               Delay_10us   0x00003e    program     static C:\Users\valen\Desktop\INGENIERIA\DIGITAL 2\GIT\TP_FINAL\Trabajo_Practico_de_Fin_de_Curso_Electronica_digital_2\Thremin.X\Theremin.asm
-                      ISR   0x000049    program     static C:\Users\valen\Desktop\INGENIERIA\DIGITAL 2\GIT\TP_FINAL\Trabajo_Practico_de_Fin_de_Curso_Electronica_digital_2\Thremin.X\Theremin.asm
-        Guardado_contexto   0x000049    program     static C:\Users\valen\Desktop\INGENIERIA\DIGITAL 2\GIT\TP_FINAL\Trabajo_Practico_de_Fin_de_Curso_Electronica_digital_2\Thremin.X\Theremin.asm
-           ChequeoBandera   0x00004c    program     static C:\Users\valen\Desktop\INGENIERIA\DIGITAL 2\GIT\TP_FINAL\Trabajo_Practico_de_Fin_de_Curso_Electronica_digital_2\Thremin.X\Theremin.asm
-            ONDA_CUADRADA   0x00004f    program     static C:\Users\valen\Desktop\INGENIERIA\DIGITAL 2\GIT\TP_FINAL\Trabajo_Practico_de_Fin_de_Curso_Electronica_digital_2\Thremin.X\Theremin.asm
-                SalidaISR   0x000055    program     static C:\Users\valen\Desktop\INGENIERIA\DIGITAL 2\GIT\TP_FINAL\Trabajo_Practico_de_Fin_de_Curso_Electronica_digital_2\Thremin.X\Theremin.asm
+                     Main   0x000005    program     static C:\Users\valen\Desktop\INGENIERIA\DIGITAL 2\GIT\TP_FINAL\Trabajo_Practico_de_Fin_de_Curso_Electronica_digital_2\Thremin.X\Theremin.asm
+                     Loop   0x00001a    program     static C:\Users\valen\Desktop\INGENIERIA\DIGITAL 2\GIT\TP_FINAL\Trabajo_Practico_de_Fin_de_Curso_Electronica_digital_2\Thremin.X\Theremin.asm
+        CalculoFrecuencia   0x00001e    program     static C:\Users\valen\Desktop\INGENIERIA\DIGITAL 2\GIT\TP_FINAL\Trabajo_Practico_de_Fin_de_Curso_Electronica_digital_2\Thremin.X\Theremin.asm
+                  NOTA_C4   0x00005a    program     static C:\Users\valen\Desktop\INGENIERIA\DIGITAL 2\GIT\TP_FINAL\Trabajo_Practico_de_Fin_de_Curso_Electronica_digital_2\Thremin.X\Theremin.asm
+                  NOTA_D4   0x00005d    program     static C:\Users\valen\Desktop\INGENIERIA\DIGITAL 2\GIT\TP_FINAL\Trabajo_Practico_de_Fin_de_Curso_Electronica_digital_2\Thremin.X\Theremin.asm
+                  NOTA_E4   0x000060    program     static C:\Users\valen\Desktop\INGENIERIA\DIGITAL 2\GIT\TP_FINAL\Trabajo_Practico_de_Fin_de_Curso_Electronica_digital_2\Thremin.X\Theremin.asm
+                  NOTA_F4   0x000063    program     static C:\Users\valen\Desktop\INGENIERIA\DIGITAL 2\GIT\TP_FINAL\Trabajo_Practico_de_Fin_de_Curso_Electronica_digital_2\Thremin.X\Theremin.asm
+                  NOTA_G4   0x000066    program     static C:\Users\valen\Desktop\INGENIERIA\DIGITAL 2\GIT\TP_FINAL\Trabajo_Practico_de_Fin_de_Curso_Electronica_digital_2\Thremin.X\Theremin.asm
+                  NOTA_A4   0x000069    program     static C:\Users\valen\Desktop\INGENIERIA\DIGITAL 2\GIT\TP_FINAL\Trabajo_Practico_de_Fin_de_Curso_Electronica_digital_2\Thremin.X\Theremin.asm
+                  NOTA_B4   0x00006c    program     static C:\Users\valen\Desktop\INGENIERIA\DIGITAL 2\GIT\TP_FINAL\Trabajo_Practico_de_Fin_de_Curso_Electronica_digital_2\Thremin.X\Theremin.asm
+                  NOTA_C5   0x00006f    program     static C:\Users\valen\Desktop\INGENIERIA\DIGITAL 2\GIT\TP_FINAL\Trabajo_Practico_de_Fin_de_Curso_Electronica_digital_2\Thremin.X\Theremin.asm
+                  NOTA_D5   0x000072    program     static C:\Users\valen\Desktop\INGENIERIA\DIGITAL 2\GIT\TP_FINAL\Trabajo_Practico_de_Fin_de_Curso_Electronica_digital_2\Thremin.X\Theremin.asm
+                  NOTA_E5   0x000075    program     static C:\Users\valen\Desktop\INGENIERIA\DIGITAL 2\GIT\TP_FINAL\Trabajo_Practico_de_Fin_de_Curso_Electronica_digital_2\Thremin.X\Theremin.asm
+                  NOTA_F5   0x000078    program     static C:\Users\valen\Desktop\INGENIERIA\DIGITAL 2\GIT\TP_FINAL\Trabajo_Practico_de_Fin_de_Curso_Electronica_digital_2\Thremin.X\Theremin.asm
+                  NOTA_G5   0x00007b    program     static C:\Users\valen\Desktop\INGENIERIA\DIGITAL 2\GIT\TP_FINAL\Trabajo_Practico_de_Fin_de_Curso_Electronica_digital_2\Thremin.X\Theremin.asm
+                  NOTA_A5   0x00007e    program     static C:\Users\valen\Desktop\INGENIERIA\DIGITAL 2\GIT\TP_FINAL\Trabajo_Practico_de_Fin_de_Curso_Electronica_digital_2\Thremin.X\Theremin.asm
+                  NOTA_B5   0x000081    program     static C:\Users\valen\Desktop\INGENIERIA\DIGITAL 2\GIT\TP_FINAL\Trabajo_Practico_de_Fin_de_Curso_Electronica_digital_2\Thremin.X\Theremin.asm
+                  NOTA_C6   0x000084    program     static C:\Users\valen\Desktop\INGENIERIA\DIGITAL 2\GIT\TP_FINAL\Trabajo_Practico_de_Fin_de_Curso_Electronica_digital_2\Thremin.X\Theremin.asm
+                  SinEcho   0x000087    program     static C:\Users\valen\Desktop\INGENIERIA\DIGITAL 2\GIT\TP_FINAL\Trabajo_Practico_de_Fin_de_Curso_Electronica_digital_2\Thremin.X\Theremin.asm
+            FinFrecuencia   0x000088    program     static C:\Users\valen\Desktop\INGENIERIA\DIGITAL 2\GIT\TP_FINAL\Trabajo_Practico_de_Fin_de_Curso_Electronica_digital_2\Thremin.X\Theremin.asm
+         CalculoDistancia   0x000089    program     static C:\Users\valen\Desktop\INGENIERIA\DIGITAL 2\GIT\TP_FINAL\Trabajo_Practico_de_Fin_de_Curso_Electronica_digital_2\Thremin.X\Theremin.asm
+             DivisionLoop   0x000096    program     static C:\Users\valen\Desktop\INGENIERIA\DIGITAL 2\GIT\TP_FINAL\Trabajo_Practico_de_Fin_de_Curso_Electronica_digital_2\Thremin.X\Theremin.asm
+              DivisionEnd   0x0000a4    program     static C:\Users\valen\Desktop\INGENIERIA\DIGITAL 2\GIT\TP_FINAL\Trabajo_Practico_de_Fin_de_Curso_Electronica_digital_2\Thremin.X\Theremin.asm
+           NoEcho_NoRango   0x0000a7    program     static C:\Users\valen\Desktop\INGENIERIA\DIGITAL 2\GIT\TP_FINAL\Trabajo_Practico_de_Fin_de_Curso_Electronica_digital_2\Thremin.X\Theremin.asm
+         Trigger_and_wait   0x0000a9    program     static C:\Users\valen\Desktop\INGENIERIA\DIGITAL 2\GIT\TP_FINAL\Trabajo_Practico_de_Fin_de_Curso_Electronica_digital_2\Thremin.X\Theremin.asm
+           RutinaMedicion   0x0000a9    program     static C:\Users\valen\Desktop\INGENIERIA\DIGITAL 2\GIT\TP_FINAL\Trabajo_Practico_de_Fin_de_Curso_Electronica_digital_2\Thremin.X\Theremin.asm
+             EsperaSubida   0x0000ac    program     static C:\Users\valen\Desktop\INGENIERIA\DIGITAL 2\GIT\TP_FINAL\Trabajo_Practico_de_Fin_de_Curso_Electronica_digital_2\Thremin.X\Theremin.asm
+              InicioTimer   0x0000ae    program     static C:\Users\valen\Desktop\INGENIERIA\DIGITAL 2\GIT\TP_FINAL\Trabajo_Practico_de_Fin_de_Curso_Electronica_digital_2\Thremin.X\Theremin.asm
+         VerificarTimeout   0x0000b1    program     static C:\Users\valen\Desktop\INGENIERIA\DIGITAL 2\GIT\TP_FINAL\Trabajo_Practico_de_Fin_de_Curso_Electronica_digital_2\Thremin.X\Theremin.asm
+             EsperaBajada   0x0000b5    program     static C:\Users\valen\Desktop\INGENIERIA\DIGITAL 2\GIT\TP_FINAL\Trabajo_Practico_de_Fin_de_Curso_Electronica_digital_2\Thremin.X\Theremin.asm
+                  Timeout   0x0000b9    program     static C:\Users\valen\Desktop\INGENIERIA\DIGITAL 2\GIT\TP_FINAL\Trabajo_Practico_de_Fin_de_Curso_Electronica_digital_2\Thremin.X\Theremin.asm
+           CapturaValores   0x0000bc    program     static C:\Users\valen\Desktop\INGENIERIA\DIGITAL 2\GIT\TP_FINAL\Trabajo_Practico_de_Fin_de_Curso_Electronica_digital_2\Thremin.X\Theremin.asm
+               Delay_10us   0x0000c1    program     static C:\Users\valen\Desktop\INGENIERIA\DIGITAL 2\GIT\TP_FINAL\Trabajo_Practico_de_Fin_de_Curso_Electronica_digital_2\Thremin.X\Theremin.asm
+        Guardado_contexto   0x0000cc    program     static C:\Users\valen\Desktop\INGENIERIA\DIGITAL 2\GIT\TP_FINAL\Trabajo_Practico_de_Fin_de_Curso_Electronica_digital_2\Thremin.X\Theremin.asm
+                      ISR   0x0000cc    program     static C:\Users\valen\Desktop\INGENIERIA\DIGITAL 2\GIT\TP_FINAL\Trabajo_Practico_de_Fin_de_Curso_Electronica_digital_2\Thremin.X\Theremin.asm
+           ChequeoBandera   0x0000cf    program     static C:\Users\valen\Desktop\INGENIERIA\DIGITAL 2\GIT\TP_FINAL\Trabajo_Practico_de_Fin_de_Curso_Electronica_digital_2\Thremin.X\Theremin.asm
+            ONDA_CUADRADA   0x0000d2    program     static C:\Users\valen\Desktop\INGENIERIA\DIGITAL 2\GIT\TP_FINAL\Trabajo_Practico_de_Fin_de_Curso_Electronica_digital_2\Thremin.X\Theremin.asm
+                SalidaISR   0x0000db    program     static C:\Users\valen\Desktop\INGENIERIA\DIGITAL 2\GIT\TP_FINAL\Trabajo_Practico_de_Fin_de_Curso_Electronica_digital_2\Thremin.X\Theremin.asm
 
 
