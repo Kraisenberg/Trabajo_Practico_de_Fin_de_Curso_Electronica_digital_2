@@ -28,36 +28,71 @@ TMP1 EQU 0x26
 DIVISOR EQU 0x27
 STATUS_TEMP EQU 0X70
 W_TEMP EQU 0X71
+DLY_H EQU 0x28
+DLY_L EQU 0x29
  
  Main
-    BSF STATUS, RP0	;BANCO 1
-    CLRF TRISB		;Puerto B como salida
-    MOVLW b'00000010'	;RC1 para ECHO, RC0 para TRIG
-    MOVWF TRISC		;Puerto C 
-    BSF STATUS, RP1	;BANCO 3
-    CLRF ANSEL		;Todo digital
-    CLRF ANSELH
-    BCF STATUS, RP1	;BANCO 1
+    BSF STATUS, RP0		;BANCO 1
+    CLRF TRISB			;Puerto B como salida
+    MOVLW b'00001010'		;RC1 para ECHO, RC0 para TRIG
+    MOVWF TRISC			;Puerto C 
+    BSF STATUS, RP1		;BANCO 3
+    CLRF ANSEL			;Todo digital
+    CLRF ANSELH	
+    BCF STATUS, RP1		;BANCO 1
     MOVLW b'10000010'	
-    MOVWF OPTION_REG	;Configuración option_reg
+    MOVWF OPTION_REG		;Configuración option_reg
     MOVLW b'10100000'
     MOVWF INTCON		;Configuración INTCON
-    BCF STATUS, RP0	;BANCO 0
+    BCF STATUS, RP0		;BANCO 0
     CLRF PORTB
-    MOVLW .152		
+    MOVLW .17	
     MOVWF periodo		;Seteo de valor PERIODO
     MOVWF TMR0
     MOVLW .58
-    MOVWF DIVISOR              ; Guardamos el número 58 (divisor constante)
-    MOVLW b'00000000'  ; T1CON: prescaler 1:1, Timer1 ON=0
+    MOVWF DIVISOR		; Guardamos el número 58 (divisor constante)
+    MOVLW b'00000000'		; T1CON: prescaler 1:1, Timer1 ON=0
     MOVWF T1CON
- 
+    CLRF Tiempo_H
+    CLRF Tiempo_L
+    CLRF PORTC
+    
  Loop
+    TestToggle:
+;	BSF PORTC, 2
+;	CALL Delay_10us
+;	BCF PORTC, 2
+;	CALL Delay_Ms_200
+;	GOTO TestToggle
+;    
     CALL RutinaMedicion
-    CALL CalculoDistancia
+    CALL Delay_60ms
+    CALL CalculoDistancia   
     CALL CalculoFrecuencia
     GOTO Loop
 
+    ;===========================
+    ; Delay de 60 ms
+    ;===========================
+    Delay_60ms:
+	MOVLW .60          ; 60 ms = 6000 * Delay_10us
+	MOVWF DLY_H        ; contador alto (60)
+
+    Delay_60ms_H:
+	MOVLW .100         ; 100 * 10 us = 1 ms
+	MOVWF DLY_L        ; contador bajo
+
+    Delay_60ms_L:
+	CALL Delay_10us
+	DECFSZ DLY_L, F
+	GOTO Delay_60ms_L  ; repetir 100 veces ? 1 ms
+
+	DECFSZ DLY_H, F
+	GOTO Delay_60ms_H  ; repetir 60 veces ? 60 ms total
+
+	RETURN
+
+    
  CalculoFrecuencia:
 	MOVF DIST_CM, W
 	BTFSC STATUS, Z
@@ -286,11 +321,11 @@ W_TEMP EQU 0X71
     
 RutinaMedicion:
     Trigger_and_wait:
-       BSF PORTC, 0
+       BSF PORTC, 2
        CALL Delay_10us
-       BCF PORTC, 0
+       BCF PORTC, 2
     EsperaSubida:
-       BTFSS PORTC, 1	    ; ECHO esta en alto?
+       BTFSS PORTC, 3	    ; ECHO esta en alto?
        GOTO EsperaSubida
     InicioTimer:
        CLRF TMR1H
@@ -298,14 +333,15 @@ RutinaMedicion:
        BSF  T1CON, TMR1ON  ; Arranca el conteo
    ; === ESPERA DEL FLANCO DE BAJADA DEL ECHO ===
        ; El TimerH se paso de 98?
-    VerificarTimeout:
-       MOVF TMR1H, 0
-       SUBLW .98
-       BTFSS STATUS, C	;C=1 si TMR1H<=98
-       GOTO Timeout	;C=0 si TMR1H>98
+;    VerificarTimeout:
+;       MOVF TMR1H, 0
+;       SUBLW .98
+;       BTFSS STATUS, C	;C=1 si TMR1H<=98
+;       GOTO Timeout	;C=0 si TMR1H>98
     EsperaBajada:
-       BTFSC PORTC, 1  ; Espera mientras siga en alto
-       GOTO VerificarTimeout
+       BTFSC PORTC, 3  ; Espera mientras siga en alto
+;       GOTO VerificarTimeout
+       GOTO EsperaBajada
        BCF  T1CON, TMR1ON
        GOTO CapturaValores
     Timeout:
@@ -346,7 +382,6 @@ ISR:
     ONDA_CUADRADA:
 	BCF INTCON, T0IF
 	MOVF periodo, W
-	XORLW 0xFF
 	BTFSC STATUS, Z
 	GOTO SalidaISR
 	MOVWF TMR0
