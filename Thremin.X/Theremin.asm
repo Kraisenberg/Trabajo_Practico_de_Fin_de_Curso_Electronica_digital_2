@@ -30,11 +30,18 @@ STATUS_TEMP EQU 0X70
 W_TEMP EQU 0X71
 DLY_H EQU 0x28
 DLY_L EQU 0x29
+ NUM EQU 0x30
+ DECE EQU 0x31
+ UNI EQU 0X32
+ CEN EQU 0x33
  
  Main
+    ;=======================================
+    ;	    CONFIGURACIÓN DE REGISTROS
+    ;=======================================
     BSF STATUS, RP0		;BANCO 1
     CLRF TRISB			;Puerto B como salida
-    MOVLW b'00001010'		;RC1 para ECHO, RC0 para TRIG
+    MOVLW b'10001010'		;RC1 para ECHO, RC0 para TRIG
     MOVWF TRISC			;Puerto C 
     BSF STATUS, RP1		;BANCO 3
     CLRF ANSEL			;Todo digital
@@ -44,7 +51,13 @@ DLY_L EQU 0x29
     MOVWF OPTION_REG		;Configuración option_reg
     MOVLW b'10100000'
     MOVWF INTCON		;Configuración INTCON
+    MOVLW .25              ; Baudrate a ~9600 con Fosc=4MHz ? SPBRG=25
+    MOVWF SPBRG
+    MOVLW b'00100110'
+    MOVWF TXSTA
     BCF STATUS, RP0		;BANCO 0
+    MOVLW b'10010000'      ; RCSTA: SPEN=1 (enable serial), CREN=1
+    MOVWF RCSTA
     CLRF PORTB
     MOVLW .17	
     MOVWF periodo		;Seteo de valor PERIODO
@@ -56,6 +69,7 @@ DLY_L EQU 0x29
     CLRF Tiempo_H
     CLRF Tiempo_L
     CLRF PORTC
+    CLRF TXREG
     
  Loop
     TestToggle:
@@ -67,7 +81,8 @@ DLY_L EQU 0x29
 ;    
     CALL RutinaMedicion
     CALL Delay_60ms
-    CALL CalculoDistancia   
+    CALL CalculoDistancia
+;    CALL EnviarDistancia
     CALL CalculoFrecuencia
     GOTO Loop
 
@@ -75,188 +90,271 @@ DLY_L EQU 0x29
     ; Delay de 60 ms
     ;===========================
     Delay_60ms:
-	MOVLW .60          ; 60 ms = 6000 * Delay_10us
-	MOVWF DLY_H        ; contador alto (60)
+	MOVLW   .100        ; bucle externo ? 100 repeticiones
+	MOVWF   DLY_H
 
     Delay_60ms_H:
-	MOVLW .100         ; 100 * 10 us = 1 ms
-	MOVWF DLY_L        ; contador bajo
+	MOVLW   .200        ; bucle interno ? 200 repeticiones
+	MOVWF   DLY_L
 
     Delay_60ms_L:
-	CALL Delay_10us
-	DECFSZ DLY_L, F
-	GOTO Delay_60ms_L  ; repetir 100 veces ? 1 ms
-
-	DECFSZ DLY_H, F
-	GOTO Delay_60ms_H  ; repetir 60 veces ? 60 ms total
-
+	DECFSZ  DLY_L, F    ; 1 ciclo (2 cuando termina)
+	GOTO    Delay_60ms_L ; 2 ciclos
+	DECFSZ  DLY_H, F
+	GOTO    Delay_60ms_H
 	RETURN
 
     
- CalculoFrecuencia:
+    CalculoFrecuencia:
 	MOVF DIST_CM, W
 	BTFSC STATUS, Z
-	GOTO SinEcho             ; Si DIST_CM = 0 ? sin eco o fuera de rango
+	GOTO SinEcho
 
-;-------------------------------------------
-; Comparaciones por rango (de mayor a menor)
-;-------------------------------------------
-	MOVLW .152
-	SUBWF DIST_CM, W
-	BTFSC STATUS, C
-	GOTO NOTA_C4
-
-	MOVLW .142
-	SUBWF DIST_CM, W
-	BTFSC STATUS, C
-	GOTO NOTA_D4
-
-	MOVLW .132
-	SUBWF DIST_CM, W
-	BTFSC STATUS, C
-	GOTO NOTA_E4
+    ;===========================================================
+    ; Comparaciones ordenadas de MAYOR a MENOR distancia
+    ;===========================================================
 
 	MOVLW .122
 	SUBWF DIST_CM, W
 	BTFSC STATUS, C
-	GOTO NOTA_F4
+	GOTO NOTA_C4
+
+	MOVLW .117
+	SUBWF DIST_CM, W
+	BTFSC STATUS, C
+	GOTO NOTA_Cs4
 
 	MOVLW .112
 	SUBWF DIST_CM, W
 	BTFSC STATUS, C
-	GOTO NOTA_G4
+	GOTO NOTA_D4
+
+	MOVLW .107
+	SUBWF DIST_CM, W
+	BTFSC STATUS, C
+	GOTO NOTA_Ds4
 
 	MOVLW .102
 	SUBWF DIST_CM, W
 	BTFSC STATUS, C
-	GOTO NOTA_A4
+	GOTO NOTA_E4
+
+	MOVLW .97
+	SUBWF DIST_CM, W
+	BTFSC STATUS, C
+	GOTO NOTA_F4
 
 	MOVLW .92
 	SUBWF DIST_CM, W
 	BTFSC STATUS, C
-	GOTO NOTA_B4
+	GOTO NOTA_Fs4
+
+	MOVLW .87
+	SUBWF DIST_CM, W
+	BTFSC STATUS, C
+	GOTO NOTA_G4
 
 	MOVLW .82
 	SUBWF DIST_CM, W
 	BTFSC STATUS, C
-	GOTO NOTA_C5
+	GOTO NOTA_Gs4
+
+	MOVLW .77
+	SUBWF DIST_CM, W
+	BTFSC STATUS, C
+	GOTO NOTA_A4
 
 	MOVLW .72
 	SUBWF DIST_CM, W
 	BTFSC STATUS, C
-	GOTO NOTA_D5
+	GOTO NOTA_As4
+
+	MOVLW .67
+	SUBWF DIST_CM, W
+	BTFSC STATUS, C
+	GOTO NOTA_B4
 
 	MOVLW .62
 	SUBWF DIST_CM, W
 	BTFSC STATUS, C
-	GOTO NOTA_E5
+	GOTO NOTA_C5
+
+	MOVLW .57
+	SUBWF DIST_CM, W
+	BTFSC STATUS, C
+	GOTO NOTA_Cs5
 
 	MOVLW .52
 	SUBWF DIST_CM, W
 	BTFSC STATUS, C
-	GOTO NOTA_F5
+	GOTO NOTA_D5
+
+	MOVLW .47
+	SUBWF DIST_CM, W
+	BTFSC STATUS, C
+	GOTO NOTA_Ds5
 
 	MOVLW .42
 	SUBWF DIST_CM, W
 	BTFSC STATUS, C
-	GOTO NOTA_G5
+	GOTO NOTA_E5
+
+	MOVLW .37
+	SUBWF DIST_CM, W
+	BTFSC STATUS, C
+	GOTO NOTA_F5
 
 	MOVLW .32
 	SUBWF DIST_CM, W
 	BTFSC STATUS, C
-	GOTO NOTA_A5
+	GOTO NOTA_Fs5
+
+	MOVLW .27
+	SUBWF DIST_CM, W
+	BTFSC STATUS, C
+	GOTO NOTA_G5
 
 	MOVLW .22
 	SUBWF DIST_CM, W
 	BTFSC STATUS, C
+	GOTO NOTA_Gs5
+
+	MOVLW .17
+	SUBWF DIST_CM, W
+	BTFSC STATUS, C
+	GOTO NOTA_A5
+
+	MOVLW .12
+	SUBWF DIST_CM, W
+	BTFSC STATUS, C
+	GOTO NOTA_As5
+
+	MOVLW .07
+	SUBWF DIST_CM, W
+	BTFSC STATUS, C
 	GOTO NOTA_B5
 
-	; Si está entre 2 y 12 cm ? nota más aguda (C6)
 	GOTO NOTA_C6
-    
-;===========================================================
-; Bloques de notas: cada uno carga el valor de periodo (TMR0)
-;===========================================================
-    
+
+    ;===========================================================
+    ; CARGA DE PERIODOS SEGÚN TU TABLA
+    ;===========================================================
+
+    ;===========================================================
+    ; CARGA DE PERIODOS SEGÚN TU TABLA (FORMATO COMPATIBLE)
+    ;===========================================================
+
     NOTA_C4:
-	MOVLW .17
-	MOVWF periodo
-	GOTO FinFrecuencia
-    
+	MOVLW .16
+	GOTO SetPer
+
+    NOTA_Cs4:
+	MOVLW .31
+	GOTO SetPer
+
     NOTA_D4:
 	MOVLW .43
-	MOVWF periodo
-	GOTO FinFrecuencia
+	GOTO SetPer
+
+    NOTA_Ds4:
+	MOVLW .55
+	GOTO SetPer
 
     NOTA_E4:
 	MOVLW .66
-	MOVWF periodo
-	GOTO FinFrecuencia
+	GOTO SetPer
 
     NOTA_F4:
 	MOVLW .77
-	MOVWF periodo
-	GOTO FinFrecuencia
+	GOTO SetPer
+
+    NOTA_Fs4:
+	MOVLW .87
+	GOTO SetPer
 
     NOTA_G4:
 	MOVLW .97
-	MOVWF periodo
-	GOTO FinFrecuencia
+	GOTO SetPer
+
+    NOTA_Gs4:
+	MOVLW .106
+	GOTO SetPer
 
     NOTA_A4:
 	MOVLW .114
-	MOVWF periodo
-	GOTO FinFrecuencia
+	GOTO SetPer
+
+    NOTA_As4:
+	MOVLW .122
+	GOTO SetPer
 
     NOTA_B4:
 	MOVLW .129
-	MOVWF periodo
-	GOTO FinFrecuencia
+	GOTO SetPer
 
     NOTA_C5:
 	MOVLW .137
-	MOVWF periodo
-	GOTO FinFrecuencia
+	GOTO SetPer
+
+    NOTA_Cs5:
+	MOVLW .143
+	GOTO SetPer
 
     NOTA_D5:
 	MOVLW .150
-	MOVWF periodo
-	GOTO FinFrecuencia
+	GOTO SetPer
+
+    NOTA_Ds5:
+	MOVLW .156
+	GOTO SetPer
 
     NOTA_E5:
 	MOVLW .161
-	MOVWF periodo
-	GOTO FinFrecuencia
+	GOTO SetPer
 
     NOTA_F5:
 	MOVLW .167
-	MOVWF periodo
-	GOTO FinFrecuencia
+	GOTO SetPer
+
+    NOTA_Fs5:
+	MOVLW .172
+	GOTO SetPer
 
     NOTA_G5:
 	MOVLW .176
-	MOVWF periodo
-	GOTO FinFrecuencia
+	GOTO SetPer
+
+    NOTA_Gs5:
+	MOVLW .181
+	GOTO SetPer
 
     NOTA_A5:
-	MOVLW .185
-	MOVWF periodo
-	GOTO FinFrecuencia
+	MOVLW .187
+	GOTO SetPer
+
+    NOTA_As5:
+	MOVLW .191
+	GOTO SetPer
 
     NOTA_B5:
-	MOVLW .193
+	MOVLW .195
+	GOTO SetPer
+
+    NOTA_C6:
+	MOVLW .198
+	GOTO SetPer
+
+
+    SetPer:
 	MOVWF periodo
 	GOTO FinFrecuencia
 
-    NOTA_C6:
-	MOVLW .196
-	MOVWF periodo
-	GOTO FinFrecuencia
+
     SinEcho:
 	CLRF periodo
-    
+
     FinFrecuencia:
-	Return
+	RETURN
     
  CalculoDistancia:
     ; Devolvio valor?
@@ -332,16 +430,15 @@ RutinaMedicion:
        CLRF TMR1L
        BSF  T1CON, TMR1ON  ; Arranca el conteo
    ; === ESPERA DEL FLANCO DE BAJADA DEL ECHO ===
-       ; El TimerH se paso de 98?
-;    VerificarTimeout:
-;       MOVF TMR1H, 0
-;       SUBLW .98
-;       BTFSS STATUS, C	;C=1 si TMR1H<=98
-;       GOTO Timeout	;C=0 si TMR1H>98
+;        El TimerH se paso de 98?
+    VerificarTimeout:
+       MOVF TMR1H, 0
+       SUBLW .98
+       BTFSS STATUS, C	;C=1 si TMR1H<=98
+       GOTO Timeout	;C=0 si TMR1H>98
     EsperaBajada:
        BTFSC PORTC, 3  ; Espera mientras siga en alto
-;       GOTO VerificarTimeout
-       GOTO EsperaBajada
+       GOTO VerificarTimeout
        BCF  T1CON, TMR1ON
        GOTO CapturaValores
     Timeout:
@@ -368,6 +465,129 @@ RutinaMedicion:
     NOP         ; 10 us
     RETURN
 
+    ;===================================================
+    ;  ENVIAR DISTANCIA POR UART  -  SUPER SIMPLE
+    ;  Formato:  Distancia: XX cm
+    ;===================================================
+
+    EnviarDistancia:
+
+	; --- Enviar texto fijo "Distancia: " ---
+	MOVLW 'D'      ; Cada MOVLW + CALL es 1 caracter
+	CALL UART_Send
+	MOVLW 'i'
+	CALL UART_Send
+	MOVLW 's'
+	CALL UART_Send
+	MOVLW 't'
+	CALL UART_Send
+	MOVLW 'a'
+	CALL UART_Send
+	MOVLW 'n'
+	CALL UART_Send
+	MOVLW 'c'
+	CALL UART_Send
+	MOVLW 'i'
+	CALL UART_Send
+	MOVLW 'a'
+	CALL UART_Send
+	MOVLW ':'
+	CALL UART_Send
+	MOVLW ' '
+	CALL UART_Send
+
+	; --- Convertir el número DIST_CM y enviarlo ---
+	MOVF DIST_CM, W
+	CALL EnviarNumero0a255   ; <--- convierte y manda
+
+	; --- Enviar " cm" ---
+	MOVLW ' '
+	CALL UART_Send
+	MOVLW 'c'
+	CALL UART_Send
+	MOVLW 'm'
+	CALL UART_Send
+
+	; --- Salto de línea ---
+	MOVLW 13     ; CR
+	CALL UART_Send
+	MOVLW 10     ; LF
+	CALL UART_Send
+
+	RETURN
+    
+    UART_Send:               ; Enviar lo que esté en W
+	BTFSS TXSTA, TRMT    ; Esperar que TXREG esté libre
+	GOTO UART_Send
+
+	MOVWF TXREG          ; Mandar el byte
+	RETURN
+    
+    ;========================================================
+    ; EnviarNumero0a255: convierte el número en W a texto
+    ;========================================================
+    ; Usa variables: NUM, CEN, DEC, UNI
+    ;========================================================
+
+    EnviarNumero0a255:
+
+	MOVWF NUM        ; Guardar el número
+	CLRF CEN
+	CLRF DECE
+	CLRF UNI
+
+    ; --- Cientos ---
+    CientosLoop:
+	MOVLW .100
+	SUBWF NUM, W
+	BTFSS STATUS, C     ; Si NUM < 100 ? salir
+	GOTO DecenasStart
+	MOVLW .100
+	SUBWF NUM, F        ; NUM -= 100
+	INCF CEN, F         ; CEN++
+	GOTO CientosLoop
+
+    DecenasStart:
+
+    ; --- Decenas ---
+    DecenasLoop:
+	MOVLW .10
+	SUBWF NUM, W
+	BTFSS STATUS, C     ; Si NUM < 10 ? salir
+	GOTO UnidadesStart
+	MOVLW .10
+	SUBWF NUM, F        ; NUM -= 10
+	INCF DECE, F         ; DEC++
+	GOTO DecenasLoop
+
+    UnidadesStart:
+	MOVF NUM, W
+	MOVWF UNI           ; UNI = lo que queda
+
+    ; --- Enviar cientos si no es cero ---
+	MOVF CEN, W
+	BTFSC STATUS, Z
+	GOTO EnviarDecenas
+	ADDLW '0'
+	CALL UART_Send
+
+    EnviarDecenas:
+	MOVF DECE, W
+	; Si CEN=0 y DEC=0 y número < 10 ? no enviar decena
+	BTFSC STATUS, Z
+	GOTO EnviarUnidades
+	ADDLW '0'
+	CALL UART_Send
+
+    EnviarUnidades:
+	MOVF UNI, W
+	ADDLW '0'
+	CALL UART_Send
+
+	RETURN
+    
+	
+	
 ISR:
     Guardado_contexto:
 	MOVWF W_TEMP
