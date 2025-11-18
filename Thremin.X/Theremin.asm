@@ -30,35 +30,65 @@ STATUS_TEMP EQU 0X70
 W_TEMP EQU 0X71
 DLY_H EQU 0x28
 DLY_L EQU 0x29
- NUM EQU 0x30
- DECE EQU 0x31
- UNI EQU 0X32
- CEN EQU 0x33
+NUM EQU 0x30
+DECE EQU 0x31
+UNI EQU 0X32
+CEN EQU 0x33
+pausa_play EQU 0x34
+contador1 EQU 0x35
+contador2 EQU 0x36
+interrupcionTMR2 EQU 0x37
  
  Main
     ;=======================================
     ;	    CONFIGURACIÓN DE REGISTROS
     ;=======================================
     BSF STATUS, RP0		;BANCO 1
-    CLRF TRISB			;Puerto B como salida
+    CLRF TRISD			;Puerto D como salida
+    MOVLW .1			;Puerto B como salida
+    MOVWF TRISB
     MOVLW b'10001010'		;RC1 para ECHO, RC0 para TRIG
-    MOVWF TRISC			;Puerto C 
+    MOVWF TRISC			;Puerto C
     BSF STATUS, RP1		;BANCO 3
     CLRF ANSEL			;Todo digital
     CLRF ANSELH	
     BCF STATUS, RP1		;BANCO 1
-    MOVLW b'10000010'	
+    MOVLW b'00000010'	
     MOVWF OPTION_REG		;Configuración option_reg
-    MOVLW b'10100000'
+    MOVLW b'11110000'
     MOVWF INTCON		;Configuración INTCON
-    MOVLW .25              ; Baudrate a ~9600 con Fosc=4MHz ? SPBRG=25
+    BSF WPUB, 0
+    MOVLW b'00000010'
+    MOVWF PIE1
+    ;--- Configurar UART 9600 bps ---
+    BANKSEL SPBRG 
+    MOVLW .25           ; 9600 baud @ 4MHz (BRGH=1)
     MOVWF SPBRG
-    MOVLW b'00100110'
-    MOVWF TXSTA
+
+    BANKSEL TXSTA
+    BSF TXSTA, TXEN     ; Habilita TX
+    BCF TXSTA, SYNC     ; Modo asíncrono
+    BSF TXSTA, BRGH     ; Alta velocidad
+    
+    BANKSEL RCSTA
+    BSF RCSTA, SPEN     ; Habilita TX (y RX si se quisiera)
+ 
+    BANKSEL BAUDCTL
+    BCF BAUDCTL, BRG16  ; Baudrate de 8 bits
+    
+    BCF STATUS, RP1
     BCF STATUS, RP0		;BANCO 0
-    MOVLW b'10010000'      ; RCSTA: SPEN=1 (enable serial), CREN=1
-    MOVWF RCSTA
-    CLRF PORTB
+    CLRF PORTD
+    ;Config TMR2
+    BSF STATUS, RP0		;BANCO 0
+    MOVLW   .249
+    MOVWF   PR2             ; 10 ms exactos
+    BCF STATUS, RP0
+    CLRF PIR1
+    MOVLW b'01111111'
+    MOVWF T2CON
+    CLRF    TMR2
+    
     MOVLW .17	
     MOVWF periodo		;Seteo de valor PERIODO
     MOVWF TMR0
@@ -70,19 +100,13 @@ DLY_L EQU 0x29
     CLRF Tiempo_L
     CLRF PORTC
     CLRF TXREG
+    CLRF pausa_play
+    CLRF interrupcionTMR2
     
  Loop
-    TestToggle:
-;	BSF PORTC, 2
-;	CALL Delay_10us
-;	BCF PORTC, 2
-;	CALL Delay_Ms_200
-;	GOTO TestToggle
-;    
     CALL RutinaMedicion
     CALL Delay_60ms
     CALL CalculoDistancia
-;    CALL EnviarDistancia
     CALL CalculoFrecuencia
     GOTO Loop
 
@@ -90,7 +114,7 @@ DLY_L EQU 0x29
     ; Delay de 60 ms
     ;===========================
     Delay_60ms:
-	MOVLW   .100        ; bucle externo ? 100 repeticiones
+	MOVLW   .150        ; bucle externo ? 100 repeticiones
 	MOVWF   DLY_H
 
     Delay_60ms_H:
@@ -103,8 +127,11 @@ DLY_L EQU 0x29
 	DECFSZ  DLY_H, F
 	GOTO    Delay_60ms_H
 	RETURN
-
     
+    ;===========================================================
+    ; Rutina de calculo de frecuencia
+    ;===========================================================
+
     CalculoFrecuencia:
 	MOVF DIST_CM, W
 	BTFSC STATUS, Z
@@ -237,95 +264,91 @@ DLY_L EQU 0x29
 	GOTO NOTA_C6
 
     ;===========================================================
-    ; CARGA DE PERIODOS SEGÚN TU TABLA
-    ;===========================================================
-
-    ;===========================================================
-    ; CARGA DE PERIODOS SEGÚN TU TABLA (FORMATO COMPATIBLE)
+    ; CARGA DE PERIODOS
     ;===========================================================
 
     NOTA_C4:
-	MOVLW .16
+	MOVLW .19
 	GOTO SetPer
 
     NOTA_Cs4:
-	MOVLW .31
+	MOVLW .33
 	GOTO SetPer
 
     NOTA_D4:
-	MOVLW .43
+	MOVLW .45
 	GOTO SetPer
 
     NOTA_Ds4:
-	MOVLW .55
+	MOVLW .57
 	GOTO SetPer
 
     NOTA_E4:
-	MOVLW .66
+	MOVLW .68
 	GOTO SetPer
 
     NOTA_F4:
-	MOVLW .77
+	MOVLW .79
 	GOTO SetPer
 
     NOTA_Fs4:
-	MOVLW .87
+	MOVLW .89
 	GOTO SetPer
 
     NOTA_G4:
-	MOVLW .97
+	MOVLW .99
 	GOTO SetPer
 
     NOTA_Gs4:
-	MOVLW .106
+	MOVLW .108
 	GOTO SetPer
 
     NOTA_A4:
-	MOVLW .114
+	MOVLW .116
 	GOTO SetPer
 
     NOTA_As4:
-	MOVLW .122
+	MOVLW .124
 	GOTO SetPer
 
     NOTA_B4:
-	MOVLW .129
+	MOVLW .131
 	GOTO SetPer
 
     NOTA_C5:
-	MOVLW .137
+	MOVLW .139
 	GOTO SetPer
 
     NOTA_Cs5:
-	MOVLW .143
+	MOVLW .145
 	GOTO SetPer
 
     NOTA_D5:
-	MOVLW .150
+	MOVLW .152
 	GOTO SetPer
 
     NOTA_Ds5:
-	MOVLW .156
+	MOVLW .158
 	GOTO SetPer
 
     NOTA_E5:
-	MOVLW .161
+	MOVLW .163
 	GOTO SetPer
 
     NOTA_F5:
-	MOVLW .167
+	MOVLW .169
 	GOTO SetPer
 
     NOTA_Fs5:
-	MOVLW .172
+	MOVLW .174
 	GOTO SetPer
 
     NOTA_G5:
-	MOVLW .176
+	MOVLW .178
 	GOTO SetPer
 
     NOTA_Gs5:
-	MOVLW .181
+	MOVLW .183
 	GOTO SetPer
 
     NOTA_A5:
@@ -349,13 +372,16 @@ DLY_L EQU 0x29
 	MOVWF periodo
 	GOTO FinFrecuencia
 
-
     SinEcho:
 	CLRF periodo
 
     FinFrecuencia:
 	RETURN
     
+    ;===========================================================
+    ; Rutina de calculo de distancia
+    ;===========================================================
+
  CalculoDistancia:
     ; Devolvio valor?
     MOVF Tiempo_H, W
@@ -374,15 +400,11 @@ DLY_L EQU 0x29
     MOVWF TMP1
     MOVF Tiempo_L, W
     MOVWF TMP0
-    
-    ;aca que hacemos
-    
-    ; inicializar resultado
-    CLRF resultado
+    CLRF resultado		;inicializar resultado
     
     DivisionLoop:
     ;-----------------------------------------------
-    ; Restar 58 del valor de 16 bits (TMP1:TMP0)
+    ; Restar de a 58 del valor de 16 bits (TMP1:TMP0)
     ;-----------------------------------------------
 	MOVF DIVISOR, W
 	SUBWF TMP0, F		; TMP0 = TMP0 - 58
@@ -401,7 +423,7 @@ DLY_L EQU 0x29
 	BTFSC STATUS, Z
 	GOTO DivisionEnd
 
-	; Si la resta fue válida ? incrementar resultado
+	; Si la resta fue válida incrementar resultado
 	INCF resultado, F
 	GOTO DivisionLoop          ; Repetir mientras alcance
 
@@ -417,6 +439,10 @@ DLY_L EQU 0x29
 	CLRF DIST_CM
 	RETURN
     
+    ;===========================================================
+    ; Rutina de medicion del sensor HCSR04
+    ;===========================================================
+	
 RutinaMedicion:
     Trigger_and_wait:
        BSF PORTC, 2
@@ -452,6 +478,10 @@ RutinaMedicion:
        MOVWF Tiempo_H
        RETURN
     
+    ;===========================================================
+    ; Delay de 10us para el trigger del sensor
+    ;===========================================================
+       
  Delay_10us:
     NOP         ; 1 us
     NOP         ; 2 us
@@ -466,7 +496,7 @@ RutinaMedicion:
     RETURN
 
     ;===================================================
-    ;  ENVIAR DISTANCIA POR UART  -  SUPER SIMPLE
+    ;  ENVIAR DISTANCIA POR UART 
     ;  Formato:  Distancia: XX cm
     ;===================================================
 
@@ -509,18 +539,17 @@ RutinaMedicion:
 	CALL UART_Send
 
 	; --- Salto de línea ---
-	MOVLW 13     ; CR
+	MOVLW .13     ; CR
 	CALL UART_Send
-	MOVLW 10     ; LF
+	MOVLW .10     ; LF
 	CALL UART_Send
 
 	RETURN
     
     UART_Send:               ; Enviar lo que esté en W
-	BTFSS TXSTA, TRMT    ; Esperar que TXREG esté libre
-	GOTO UART_Send
-
-	MOVWF TXREG          ; Mandar el byte
+	BTFSS PIR1, TXIF    
+	GOTO $-1
+	MOVWF TXREG
 	RETURN
     
     ;========================================================
@@ -585,9 +614,33 @@ RutinaMedicion:
 	CALL UART_Send
 
 	RETURN
+
+    ;-------------------------------------
+    ; Delay de 20 ms para antirebote
+    ; Usa: contador1, contador2
+    ;-------------------------------------
+
+    Delay20ms:
+	MOVLW   .100        ; 100 loops externos
+	MOVWF   contador1
+
+    Loop1
+	MOVLW   .200        ; 200 loops internos
+	MOVWF   contador2
+
+    Loop2
+	DECFSZ  contador2, f
+	GOTO    Loop2
+
+	DECFSZ  contador1, f
+	GOTO    Loop1
+
+	RETURN
+	
+    ;===========================================================
+    ; Rutina de interrupción
+    ;===========================================================
     
-	
-	
 ISR:
     Guardado_contexto:
 	MOVWF W_TEMP
@@ -597,18 +650,42 @@ ISR:
     ChequeoBandera:
 	BTFSC INTCON, T0IF
 	GOTO ONDA_CUADRADA
+	BTFSC INTCON, INTF
+	GOTO rutinapausa
+	BTFSC PIR1, TMR2IF
+	GOTO rutinaUART
 	GOTO SalidaISR
     
     ONDA_CUADRADA:
 	BCF INTCON, T0IF
+	BTFSS pausa_play, 0
+	GOTO SalidaISR
 	MOVF periodo, W
 	BTFSC STATUS, Z
 	GOTO SalidaISR
 	MOVWF TMR0
 	MOVLW .1
-	XORWF PORTB, F
+	XORWF PORTD, F
 	GOTO SalidaISR
     
+    rutinapausa:
+	BCF INTCON, INTF
+	CALL Delay20ms
+	MOVLW .1
+	XORWF pausa_play, F
+	GOTO SalidaISR
+
+    rutinaUART:
+	BCF PIR1, TMR2IF
+	INCF interrupcionTMR2, F
+	MOVF interrupcionTMR2, W
+	SUBLW .10
+	BTFSS STATUS, Z
+	GOTO SalidaISR
+	CLRF interrupcionTMR2
+	CALL EnviarDistancia
+	GOTO SalidaISR
+	
     SalidaISR:
 	SWAPF STATUS_TEMP, W
 	MOVWF STATUS
