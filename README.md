@@ -42,4 +42,4 @@ Se genera un tono correspondiente a esa frecuencia.
 El usuario controla el sonido moviendo la mano en el aire.
 
 # Diagrama de circuito:
-![Proteus](https://raw.githubusercontent.com/Kraisenberg/Trabajo_Practico_de_Fin_de_Curso_Electronica_digital_2/simulador/esquema.png)
+![Proteus](https://github.com/Kraisenberg/Trabajo_Practico_de_Fin_de_Curso_Electronica_digital_2/blob/main/simulador/esquema.png)
