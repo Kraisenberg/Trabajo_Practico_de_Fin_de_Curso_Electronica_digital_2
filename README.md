@@ -19,6 +19,8 @@ distancia = (tiempo_eco * velsonido)/2
 	​
 Esta distancia cambia de forma continua conforme el usuario mueve la mano.
 
+El valor de distancia lo enviamos por computadora a traves de una coneccion serial asincrona
+
 🔹 2. Conversión de distancia a frecuencia
 
 La distancia medida se convierte en un valor de frecuencia.
