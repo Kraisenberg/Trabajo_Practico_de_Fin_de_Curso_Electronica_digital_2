@@ -16,7 +16,7 @@ El sensor HC-SR04 emite un pulso ultrasónico de 40 kHz y mide el tiempo que tar
 El microcontrolador calcula la distancia usando:
 
 distancia = (tiempo_eco * velsonido)/2
-	​
+
 Esta distancia cambia de forma continua conforme el usuario mueve la mano.
 
 El valor de distancia lo enviamos por computadora a traves de una coneccion serial asincrona
